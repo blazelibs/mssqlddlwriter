@@ -5,3 +5,4 @@ dist
 *komodo*
 *.egg-info
 mssqlddlwriter/tests/tests.cfg
+mssqlddlwriter/tests/output/*
