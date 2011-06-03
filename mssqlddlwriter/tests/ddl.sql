@@ -40,4 +40,22 @@ REFERENCES [dbo].[Associates] ([AssociateID])
 ON DELETE CASCADE
 --statement-break
 ALTER TABLE [dbo].[Users] CHECK CONSTRAINT [FK_Users_Associates]
+--statement-break
+ALTER TABLE [dbo].[Users] ADD CONSTRAINT [CK_Users_AssociateId] CHECK  ([associate_id]>1000)
 
+--statement-break
+CREATE    TRIGGER [dbo].[tUsersUpdate]
+ON [dbo].[Users]
+FOR UPDATE
+AS
+
+DECLARE		@tabname	VARCHAR(100)
+-- we would normally do something here, but this is just for testing
+
+--statement-break
+CREATE NONCLUSTERED INDEX [AssociateId] ON [dbo].[Users]
+(
+	[associate_id] ASC,
+	[UserID] DESC,
+	[Active] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 80) ON [PRIMARY]
