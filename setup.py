@@ -1,11 +1,20 @@
 import sys, os
 from setuptools import setup, find_packages
+from setuptools.command.develop import develop as STDevelopCmd
 
 from mssqlddlwriter import VERSION
 
 cdir = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(cdir, 'readme.rst')).read()
 CHANGELOG = open(os.path.join(cdir, 'changelog.rst')).read()
+
+class DevelopCmd(STDevelopCmd):
+    def run(self):
+        # nose is required for testing
+        self.distribution.install_requires.append('nose')
+        # add in the nose plugin only when we are using the develop command
+        self.distribution.entry_points['nose.plugins'] = ['mssqlddlwriter_config = mssqlddlwriter.nose_plugin:ConfigPlugin']
+        STDevelopCmd.run(self)
 
 setup(
     name='MSSQLDDLWriter',
@@ -32,4 +41,10 @@ setup(
     install_requires=[
         'SQLAlchemy'
     ],
+    cmdclass = {
+        'develop': DevelopCmd
+    },
+    # don't remove this, otherwise the customization above in DevelopCmd
+    # will break.  You can safely add to it though, if needed.
+    entry_points = {}
 )
