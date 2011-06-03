@@ -4,3 +4,4 @@ dist
 *.pyc
 *komodo*
 *.egg-info
+mssqlddlwriter/tests/tests.cfg
