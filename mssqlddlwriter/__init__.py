@@ -393,7 +393,6 @@ def write(dump_path, given_engine, print_names=True):
         sasql.and_(
             SysObject.type.in_(('U', 'V', 'P', 'FN', 'IF', 'TF')),
             SysObject.is_ms_shipped == 0,
-            SysObject.name.in_((u'Users', u'RackInspectionAUDIT', u'TimeRecords'))
         )).order_by(SysObject.name).all()
 
     for obj in res:
