@@ -12,13 +12,13 @@ rm -rf "$VENVDIR"
 # create a new virtualenv
 virtualenv "$VENVDIR" --no-site-packages -q
 
+if [ -z "$WORKSPACE" ]; then
 # activate virtualenv
 source "$VENVDIR/bin/activate"
+fi
 
 # install from pypi
 pip install -q "https://bitbucket.org/rsyring/mssqlddlwriter/get/tip.zip#egg=mssqlddlwriter"
-echo "installed ok"
 
 # import it
 python -c 'import mssqlddlwriter'
-echo "imported ok"
