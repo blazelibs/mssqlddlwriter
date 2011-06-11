@@ -2,11 +2,10 @@ import sys, os
 from setuptools import setup, find_packages
 from setuptools.command.develop import develop as STDevelopCmd
 
-from mssqlddlwriter import VERSION
-
 cdir = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(cdir, 'readme.rst')).read()
 CHANGELOG = open(os.path.join(cdir, 'changelog.rst')).read()
+VERSION = open(os.path.join(cdir, 'mssqlddlwriter', 'version.txt')).read().strip()
 
 class DevelopCmd(STDevelopCmd):
     def run(self):
