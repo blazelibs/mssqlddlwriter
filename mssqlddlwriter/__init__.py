@@ -6,11 +6,11 @@ import sqlalchemy.schema as sasch
 import sqlalchemy.sql as sasql
 import sqlalchemy.orm as saorm
 
-from mssqlddlwriter.utils import mkdirs
+from mssqlddlwriter.utils import mkdirs, getversion
 
 from sqlalchemy.ext.declarative import declarative_base
 
-VERSION = '0.1'
+VERSION = getversion()
 
 Base = declarative_base()
 Session = saorm.sessionmaker()

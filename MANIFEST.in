@@ -1,2 +1,3 @@
 include changelog.rst
 include readme.rst
+include mssqlddlwriter/version.txt
