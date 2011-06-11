@@ -16,7 +16,9 @@ virtualenv "$VENVDIR" --no-site-packages -q
 source "$VENVDIR/bin/activate"
 
 # install from pypi
-pip install "https://bitbucket.org/rsyring/mssqlddlwriter/get/tip.zip#egg=mssqlddlwriter"
+pip install -q "https://bitbucket.org/rsyring/mssqlddlwriter/get/tip.zip#egg=mssqlddlwriter"
+echo "installed ok"
 
 # import it
 python -c 'import mssqlddlwriter'
+echo "imported ok"
