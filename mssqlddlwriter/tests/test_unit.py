@@ -13,6 +13,8 @@ class TestOutput(object):
     def setup_class(cls):
         h.clear_db()
         h.run_file_sql('ddl.sql')
+        # want windows line endings
+        h.run_file_sql('ddl_wle.sql')
         msddl.write(h.outdir, h.engine, print_names=False)
 
     def assert_files_equal(self, dir, file):
@@ -21,7 +23,9 @@ class TestOutput(object):
         with open(expf, 'rb') as expfh:
             exp_lines = expfh.read().replace('\r', '').split('\n')
         with open(outf, 'rb') as outfh:
-            out_lines = outfh.read().replace('\r', '').split('\n')
+            contents = outfh.read()
+            assert '\r\n' not in contents
+            out_lines = contents.split('\n')
 
         # check date stamps
         assert out_lines[0].startswith('-- created:')
@@ -45,3 +49,6 @@ class TestOutput(object):
     def test_users(self):
         self.assert_files_equal('tables', 'Users.sql')
         self.assert_files_equal('tables', 'Users_trg_tUsersUpdate.sql')
+
+    def test_line_endings(self):
+        self.assert_files_equal('views', 'vUsersList.sql')
