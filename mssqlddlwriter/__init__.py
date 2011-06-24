@@ -205,7 +205,9 @@ class ObjWriter(object):
             output.append('SET QUOTED_IDENTIFIER ON')
         output.append('')
         output.append('--statement-break')
-        output.append(self.ddl().replace('\r\n', '\n').strip())
+        # replace windows line endings and corrupted line endings
+        sql = self.ddl().replace('\r\n', '\n').replace('\r', '\n')
+        output.append(sql.strip())
         return '\n'.join(output)
 
     def write(self):
