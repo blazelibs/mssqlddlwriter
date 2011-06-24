@@ -205,7 +205,7 @@ class ObjWriter(object):
             output.append('SET QUOTED_IDENTIFIER ON')
         output.append('')
         output.append('--statement-break')
-        output.append(self.ddl().strip())
+        output.append(self.ddl().replace('\r\n', '\n').strip())
         return '\n'.join(output)
 
     def write(self):
