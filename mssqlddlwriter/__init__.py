@@ -17,19 +17,11 @@ Session = saorm.sessionmaker()
 ses = None
 engine = None
 
-_sysobjs_sql_parent = """
-SELECT o.object_id, O.[name], O.type, create_date, modify_date
-FROM sys.objects O
-where O.type <> ('D', 'PK')
-and parent_id = %s
-ORDER BY name
-"""
-
-_sql_modules_sql = """
+_sql_modules_sql = sasql.text("""
 SELECT uses_ansi_nulls, uses_quoted_identifier, definition
 FROM sys.sql_modules
-where object_id = %s
-"""
+where object_id = :object_id
+""")
 
 class SysSchema(Base):
     __tablename__ = 'schemas'
@@ -180,7 +172,7 @@ class ObjWriter(object):
         self.populate()
 
     def populate(self):
-        res = engine.execute(_sql_modules_sql, [self.oid])
+        res = engine.execute(_sql_modules_sql, object_id=self.oid)
         if not res:
             return
         row = res.fetchone()
