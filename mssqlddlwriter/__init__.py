@@ -2,6 +2,7 @@ from os import path
 from shutil import rmtree
 import time
 
+from blazeutils.decorators import retry
 import sqlalchemy as sa
 import sqlalchemy.schema as sasch
 import sqlalchemy.sql as sasql
@@ -364,6 +365,15 @@ _write_dirs = (
     'functions'
 )
 
+# have to delay the creation of the directories sometimes b/c after removing
+# them windows throws an error when trying to re-create them right away
+#
+# wish we could test for a WindowsError here, but that apparently isn't defined
+# on linux, so OSError is the super of WindowsError
+@retry(10, OSError, delay=0.2, msg='Access is denied')
+def make_directory(target):
+    mkdirs(target)
+
 def write(dump_path, given_engine, print_names=True):
     global ses
     global engine
@@ -381,8 +391,11 @@ def write(dump_path, given_engine, print_names=True):
         target = path.join(dump_path, d)
         if path.isdir(target):
             rmtree(target)
-            time.sleep(0.1)
-        mkdirs(target)
+            # for some reason, on windows, there is a delay after deleting
+            # the folder where if we try to re-create it right away, we get
+            # an error
+            time.sleep(0.5)
+        make_directory(target)
 
     # create new files
     res = ses.query(SysObject).filter(
