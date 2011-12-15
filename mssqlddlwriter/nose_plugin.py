@@ -34,7 +34,6 @@ class ConfigPlugin(Plugin):
 
         if options.msddl_sa_url is None:
             _parser.read(th.cfgpath)
-            print 'using config: %s' % th.cfgpath
             section = options.msddl_section
 
             if not _parser.has_section(section) and section != 'DEFAULT':
