@@ -6,3 +6,4 @@ dist
 *.egg-info
 mssqlddlwriter/tests/tests.cfg
 mssqlddlwriter/tests/output/*
+nosetests.xml
