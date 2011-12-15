@@ -1,6 +1,5 @@
 from os import path
 from shutil import rmtree
-import time
 
 from blazeutils.decorators import retry
 import sqlalchemy as sa
@@ -391,10 +390,6 @@ def write(dump_path, given_engine, print_names=True):
         target = path.join(dump_path, d)
         if path.isdir(target):
             rmtree(target)
-            # for some reason, on windows, there is a delay after deleting
-            # the folder where if we try to re-create it right away, we get
-            # an error
-            time.sleep(0.5)
         make_directory(target)
 
     # create new files
