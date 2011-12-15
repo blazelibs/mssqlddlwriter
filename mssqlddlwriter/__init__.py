@@ -1,5 +1,6 @@
 from os import path
 from shutil import rmtree
+import time
 
 import sqlalchemy as sa
 import sqlalchemy.schema as sasch
@@ -380,6 +381,7 @@ def write(dump_path, given_engine, print_names=True):
         target = path.join(dump_path, d)
         if path.isdir(target):
             rmtree(target)
+            time.sleep(0.1)
         mkdirs(target)
 
     # create new files
