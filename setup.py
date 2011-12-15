@@ -7,7 +7,7 @@ README = open(os.path.join(cdir, 'readme.rst')).read()
 CHANGELOG = open(os.path.join(cdir, 'changelog.rst')).read()
 VERSION = open(os.path.join(cdir, 'mssqlddlwriter', 'version.txt')).read().strip()
 
-class DevelopCmd(STDevelopCmd):
+class DevelopWithNoseCmd(STDevelopCmd):
     def run(self):
         # nose is required for testing
         self.distribution.install_requires.append('nose')
@@ -41,7 +41,7 @@ setup(
         'SQLAlchemy'
     ],
     cmdclass = {
-        'develop': DevelopCmd
+        'develop_with_nose': DevelopWithNoseCmd
     },
     # don't remove this, otherwise the customization above in DevelopCmd
     # will break.  You can safely add to it though, if needed.
