@@ -39,7 +39,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'SQLAlchemy',
-        'BlazeUtils',
+        'BlazeUtils>=0.3.7',
     ],
     cmdclass = {
         'develop_with_nose': DevelopWithNoseCmd
