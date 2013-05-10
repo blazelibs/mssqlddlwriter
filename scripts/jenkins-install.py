@@ -10,7 +10,7 @@ bh = BuildHelper(package, type)
 bh.venv_create()
 
 # install package
-bh.vecall('pip', 'install', "https://bitbucket.org/rsyring/mssqlddlwriter/get/default.zip#egg=mssqlddlwriter")
+bh.vecall('pip', 'install', "https://bitbucket.org/level12/mssqlddlwriter/get/default.zip#egg=mssqlddlwriter")
 
 # import module as our "test"
 bh.vecall('python', '-c', 'import mssqlddlwriter')
