@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from itertools import izip_longest, count
 from os import path
 

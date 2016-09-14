@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 from os import path
+import six
 
 class Config(object):
     pass
@@ -23,7 +25,7 @@ def clear_db():
     }
     delete_sql = []
     to_repeat_sql = []
-    for type, drop_sql in mapping.iteritems():
+    for type, drop_sql in six.iteritems(mapping):
         sql = 'select name, object_name( parent_object_id ) as parent_name '\
             'from sys.objects where type in (\'%s\')' % '", "'.join(type)
         res = engine.execute(sql)

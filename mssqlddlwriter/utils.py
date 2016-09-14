@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import os
 
 def mkdirs(newdir, mode=None):
@@ -10,7 +11,7 @@ def mkdirs(newdir, mode=None):
         not being able to be created.
     """
     if mode is None:
-        mode = 0750
+        mode = 0o750
     if os.path.isdir(newdir):
         pass
     elif os.path.isfile(newdir):
