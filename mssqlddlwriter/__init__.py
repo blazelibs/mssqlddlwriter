@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from os import path
 from shutil import rmtree
 
@@ -402,5 +404,5 @@ def write(dump_path, given_engine, print_names=True):
     for obj in res:
         wr = obj.getwriter(dump_path)
         if print_names:
-            print obj.name
+            print(obj.name)
         wr.write()
