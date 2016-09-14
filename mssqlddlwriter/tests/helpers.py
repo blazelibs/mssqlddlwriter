@@ -36,7 +36,7 @@ def clear_db():
 
 def run_file_sql(fname):
     full_path = path.join(cdir, fname)
-    with open(full_path, 'rb') as fh:
+    with open(full_path, 'r') as fh:
         sql_str = fh.read()
     _execute_sql_string(sql_str)
 

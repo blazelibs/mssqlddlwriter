@@ -1,6 +1,7 @@
 from __future__ import absolute_import
-from itertools import izip_longest, count
+from itertools import count
 from os import path
+import six
 
 from nose.tools import eq_
 
@@ -21,9 +22,9 @@ class TestOutput(object):
     def assert_files_equal(self, dir, file):
         expf = path.join(h.expdir, dir, file)
         outf = path.join(h.outdir, dir, file)
-        with open(expf, 'rb') as expfh:
-            exp_lines = expfh.read().replace('\r', '').split('\n')
-        with open(outf, 'rb') as outfh:
+        with open(expf, 'r') as expfh:
+            exp_lines = expfh.readlines()
+        with open(outf, 'r') as outfh:
             contents = outfh.read()
             assert '\r\n' not in contents
             out_lines = contents.split('\n')
@@ -33,7 +34,7 @@ class TestOutput(object):
         assert out_lines[1].startswith('-- last updated:')
 
         # compare line by line
-        for num, exp, out in izip_longest(count(), exp_lines, out_lines):
+        for num, exp, out in six.moves.zip_longest(count(), exp_lines, out_lines):
             # without this, izip_longest runs forever because of count()
             if num > len(exp_lines) and num > len(out_lines):
                 break

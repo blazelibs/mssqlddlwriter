@@ -206,7 +206,7 @@ class ObjWriter(object):
         return '\n'.join(output)
 
     def write(self):
-        with open(self.file_path, 'wb') as fp:
+        with open(self.file_path, 'w') as fp:
             fp.write( self.file_output() )
 
 class DbTable(ObjWriter):
