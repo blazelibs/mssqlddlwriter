@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from os import path
 from shutil import rmtree
 
@@ -204,7 +206,7 @@ class ObjWriter(object):
         return '\n'.join(output)
 
     def write(self):
-        with open(self.file_path, 'wb') as fp:
+        with open(self.file_path, 'w') as fp:
             fp.write( self.file_output() )
 
 class DbTable(ObjWriter):
@@ -402,5 +404,5 @@ def write(dump_path, given_engine, print_names=True):
     for obj in res:
         wr = obj.getwriter(dump_path)
         if print_names:
-            print obj.name
+            print(obj.name)
         wr.write()

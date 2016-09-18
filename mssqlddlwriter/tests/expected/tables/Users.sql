@@ -13,7 +13,7 @@ CREATE TABLE dbo.[Users] (
 	[Active] BIT NOT NULL DEFAULT ((1)),
 	associate_id INTEGER NULL,
 	pass_hash VARCHAR(128) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT ('placeholder'),
-	PRIMARY KEY ([UserID]),
+	CONSTRAINT [PK_Users] PRIMARY KEY ([UserID]),
 	CONSTRAINT [FK_Users_Associates] FOREIGN KEY(associate_id) REFERENCES dbo.[Associates] ([AssociateID]) ON DELETE CASCADE
 )
 

@@ -1,4 +1,5 @@
-import ConfigParser
+from __future__ import absolute_import
+import six.moves.configparser
 import os
 
 from nose.plugins import Plugin
@@ -6,7 +7,7 @@ import sqlalchemy as sa
 
 import mssqlddlwriter.tests.helpers as th
 
-_parser = ConfigParser.ConfigParser({
+_parser = six.moves.configparser.ConfigParser({
     'sa_url': ''
 })
 
