@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import sys, os
 from setuptools import setup, find_packages
 from setuptools.command.develop import develop as STDevelopCmd
