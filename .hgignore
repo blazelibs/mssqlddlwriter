@@ -1,9 +1,0 @@
-syntax: glob
-build
-dist
-*.pyc
-*komodo*
-*.egg-info
-mssqlddlwriter/tests/tests.cfg
-mssqlddlwriter/tests/output/*
-nosetests.xml
