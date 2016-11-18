@@ -1,0 +1,2 @@
+[DEFAULT]
+sa_url = mssql+pymssql://sa:Password12!@localhost:1433/tempdb

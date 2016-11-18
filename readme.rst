@@ -1,6 +1,12 @@
 MSSQL DDL Writer
 ================
 
+.. image:: https://ci.appveyor.com/api/projects/status/ssle091vl9l9x947?svg=true
+    :target: https://ci.appveyor.com/project/level12/mssqlddlwriter
+
+.. image:: https://codecov.io/gh/blazelibs/mssqlddlwriter/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/blazelibs/mssqlddlwriter
+
 This project facilitates the writing of Microsft SQL Server DDL out to files.
 
 Example Usage
