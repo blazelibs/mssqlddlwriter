@@ -1,0 +1,8 @@
+-r common.txt
+
+codecov
+flake8
+nose
+pymssql
+tox
+wheel

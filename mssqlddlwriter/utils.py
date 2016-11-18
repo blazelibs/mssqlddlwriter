@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 import os
 
+
 def mkdirs(newdir, mode=None):
     """
         a "safe" verision of makedirs() that will only create the directory
@@ -15,10 +16,11 @@ def mkdirs(newdir, mode=None):
     if os.path.isdir(newdir):
         pass
     elif os.path.isfile(newdir):
-        raise OSError("a file with the same name as the desired " \
+        raise OSError("a file with the same name as the desired "
                       "dir, '%s', already exists." % newdir)
     else:
         os.makedirs(newdir, mode)
+
 
 def getversion():
     cdir = os.path.abspath(os.path.dirname(__file__))
