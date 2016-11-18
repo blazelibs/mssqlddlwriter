@@ -46,7 +46,7 @@ class TestOutput(object):
             # skip first two lines which are date stamps
             if num < 2:
                 continue
-            eq_(exp, out, 'line %s: "%s" != "%s"' % (num+1, exp, out))
+            eq_(exp, out, 'line %s: "%s" != "%s"' % (num + 1, exp, out))
 
     def test_users(self):
         self.assert_files_equal('tables', 'Users.sql')

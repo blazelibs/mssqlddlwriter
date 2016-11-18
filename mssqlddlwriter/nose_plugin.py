@@ -11,6 +11,7 @@ _parser = six.moves.configparser.ConfigParser({
     'sa_url': ''
 })
 
+
 class ConfigPlugin(Plugin):
     enabled = True
 

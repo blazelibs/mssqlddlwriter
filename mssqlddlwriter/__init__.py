@@ -26,19 +26,22 @@ FROM sys.sql_modules
 where object_id = :object_id
 """)
 
+
 class SysSchema(Base):
     __tablename__ = 'schemas'
-    __table_args__ = {'schema':'sys'}
+    __table_args__ = {'schema': 'sys'}
 
     id = sa.Column('schema_id', sa.Integer, nullable=False, primary_key=True)
     name = sa.Column(sa.Unicode(128), nullable=False)
 
+
 class SysObject(Base):
     __tablename__ = 'objects'
-    __table_args__ = {'schema':'sys'}
+    __table_args__ = {'schema': 'sys'}
 
     id = sa.Column('object_id', sa.Integer, nullable=False, primary_key=True)
-    parent_object_id = sa.Column(sa.Integer, sa.ForeignKey('sys.objects.object_id'), nullable=False)
+    parent_object_id = sa.Column(sa.Integer, sa.ForeignKey('sys.objects.object_id'),
+                                 nullable=False)
     parent = saorm.relation('SysObject', lazy=False, remote_side=[id])
     type = sa.Column(sa.String(2), nullable=False)
     name = sa.Column(sa.Unicode(128), nullable=False)
@@ -67,68 +70,81 @@ class SysObject(Base):
             return DbCheckConstraint(*args)
         raise ValueError('type "%s" not supported' % type)
 
+
 class SysColumn(Base):
     __tablename__ = 'columns'
-    __table_args__ = {'schema':'sys'}
+    __table_args__ = {'schema': 'sys'}
 
     object_id = sa.Column(sa.Integer, nullable=False, primary_key=True, autoincrement=False)
     column_id = sa.Column(sa.Integer, nullable=False, primary_key=True, autoincrement=False)
     name = sa.Column(sa.Unicode(128), nullable=False)
 
+
 class SysFileGroup(Base):
     __tablename__ = 'filegroups'
-    __table_args__ = {'schema':'sys'}
+    __table_args__ = {'schema': 'sys'}
 
     name = sa.Column(sa.Unicode(128), nullable=False, primary_key=True)
     data_space_id = sa.Column(sa.Integer, nullable=False)
 
+
 class SysIndexColumn(Base):
     __tablename__ = 'index_columns'
-    __table_args__ = {'schema':'sys'}
+    __table_args__ = {'schema': 'sys'}
 
-    object_id = sa.Column(sa.Integer, sa.ForeignKey('sys.indexes.object_id'), sa.ForeignKey('sys.columns.object_id'), nullable=False, primary_key=True, autoincrement=False)
-    index_id = sa.Column(sa.Integer, sa.ForeignKey('sys.indexes.index_id'), nullable=False, primary_key=True, autoincrement=False)
+    object_id = sa.Column(sa.Integer, sa.ForeignKey('sys.indexes.object_id'),
+                          sa.ForeignKey('sys.columns.object_id'), nullable=False, primary_key=True,
+                          autoincrement=False)
+    index_id = sa.Column(sa.Integer, sa.ForeignKey('sys.indexes.index_id'), nullable=False,
+                         primary_key=True, autoincrement=False)
     index_column_id = sa.Column(sa.Integer, nullable=False, primary_key=True, autoincrement=False)
     column_id = sa.Column(sa.Integer, sa.ForeignKey('sys.columns.column_id'), nullable=False)
     key_ordinal = sa.Column(sa.Integer, nullable=False)
     is_descending_key = sa.Column(sa.Integer, nullable=False)
 
-    column = saorm.relationship(SysColumn, lazy=False, primaryjoin=sasql.and_(
-                        SysColumn.object_id == object_id,
-                        SysColumn.column_id == column_id
-                    )
-                )
+    column = saorm.relationship(
+        SysColumn, lazy=False, primaryjoin=sasql.and_(
+            SysColumn.object_id == object_id,
+            SysColumn.column_id == column_id
+        )
+    )
+
 
 class SysIndex(Base):
     __tablename__ = 'indexes'
-    __table_args__ = {'schema':'sys'}
+    __table_args__ = {'schema': 'sys'}
 
-    parent_id = sa.Column('object_id', sa.Integer, sa.ForeignKey('sys.objects.object_id'), nullable=False, primary_key=True, autoincrement=False)
+    parent_id = sa.Column('object_id', sa.Integer, sa.ForeignKey('sys.objects.object_id'),
+                          nullable=False, primary_key=True, autoincrement=False)
     index_id = sa.Column(sa.Integer, nullable=False, primary_key=True)
     name = sa.Column(sa.Unicode(128), nullable=False)
     type_desc = sa.Column(sa.Unicode(60), nullable=False)
-    data_space_id = sa.Column(sa.Integer, sa.ForeignKey('sys.filegroups.data_space_id'), nullable=False)
+    data_space_id = sa.Column(sa.Integer, sa.ForeignKey('sys.filegroups.data_space_id'),
+                              nullable=False)
     is_primary_key = sa.Column(sa.Integer, nullable=False)
     is_unique_constraint = sa.Column(sa.Integer, nullable=False)
 
     parent = saorm.relation(SysObject, lazy=False)
     data_space = saorm.relation(SysFileGroup, lazy=False)
-    columns = saorm.relation(SysIndexColumn, lazy=False, order_by=SysIndexColumn.key_ordinal,
-                    primaryjoin=sasql.and_(
-                        SysIndexColumn.object_id == parent_id,
-                        SysIndexColumn.index_id == index_id
-                    )
-                )
+    columns = saorm.relation(
+        SysIndexColumn, lazy=False, order_by=SysIndexColumn.key_ordinal,
+        primaryjoin=sasql.and_(
+            SysIndexColumn.object_id == parent_id,
+            SysIndexColumn.index_id == index_id
+        )
+    )
 
     def getwriter(self, dump_path):
         return DbIndex(dump_path, None, self.name, '', None, None, self)
 
+
 class SysForeignKey(Base):
     __tablename__ = 'foreign_keys'
-    __table_args__ = {'schema':'sys'}
+    __table_args__ = {'schema': 'sys'}
 
     object_id = sa.Column(sa.Integer, nullable=False, primary_key=True)
-    parent_object_id = sa.Column(sa.Integer, sa.ForeignKey('sys.objects.object_id'), nullable=False)
+    parent_object_id = sa.Column(sa.Integer, sa.ForeignKey('sys.objects.object_id'),
+                                 nullable=False)
     name = sa.Column(sa.Unicode(128), nullable=False)
     delete_referential_action_desc = sa.Column(sa.Unicode(60), nullable=False)
     update_referential_action_desc = sa.Column(sa.Unicode(60), nullable=False)
@@ -145,16 +161,19 @@ class SysForeignKey(Base):
             return None
         return desc.replace('_', ' ')
 
+
 class SysCheckConstraint(Base):
     __tablename__ = 'check_constraints'
-    __table_args__ = {'schema':'sys'}
+    __table_args__ = {'schema': 'sys'}
 
     object_id = sa.Column(sa.Integer, nullable=False, primary_key=True)
-    parent_object_id = sa.Column(sa.Integer, sa.ForeignKey('sys.objects.object_id'), nullable=False)
+    parent_object_id = sa.Column(sa.Integer, sa.ForeignKey('sys.objects.object_id'),
+                                 nullable=False)
     name = sa.Column(sa.Unicode(128), nullable=False)
     definition = sa.Column(sa.Text, nullable=False)
 
     parent = saorm.relation(SysObject, lazy=False)
+
 
 class ObjWriter(object):
     def __init__(self, dump_path, oid, name, type, createts, modts, so):
@@ -207,20 +226,24 @@ class ObjWriter(object):
 
     def write(self):
         with open(self.file_path, 'w') as fp:
-            fp.write( self.file_output() )
+            fp.write(self.file_output())
+
 
 class DbTable(ObjWriter):
     folder_name = 'tables'
 
     def ddl(self):
         output_ddl = []
-        t = sa.Table(self.name, Base.metadata, autoload=True, autoload_with=engine, schema=self.so.schema.name)
+        t = sa.Table(self.name, Base.metadata, autoload=True, autoload_with=engine,
+                     schema=self.so.schema.name)
 
         # SA doesn't currently pick up foreign key ON DELETE/UPDATE, so we have
         # to patch those values in
         for c in t.constraints:
             if isinstance(c, sasch.ForeignKeyConstraint):
-                sysfk = ses.query(SysForeignKey).filter_by(parent_object_id = self.oid, name=c.name).one()
+                sysfk = ses.query(SysForeignKey).filter_by(
+                    parent_object_id=self.oid, name=c.name
+                ).one()
                 c.ondelete = sysfk.ondelete()
                 c.onupdate = sysfk.onupdate()
         table_ddl = str(sasch.CreateTable(t).compile(engine)).strip()
@@ -264,7 +287,6 @@ class DbTable(ObjWriter):
             )
         ).order_by(SysObject.name).all()
 
-
         for obj in res:
             cc_ddl.append('--statement-break')
             cc_ddl.append(obj.getwriter(self.dump_path).ddl())
@@ -281,7 +303,6 @@ class DbTable(ObjWriter):
             )
         ).order_by(SysIndex.index_id).all()
 
-
         for obj in res:
             idx_ddl.append('--statement-break')
             idx_ddl.append(obj.getwriter(self.dump_path).ddl())
@@ -289,7 +310,6 @@ class DbTable(ObjWriter):
         return '\n'.join(idx_ddl)
 
     def trigger_ddl(self):
-        trigger_sql = []
         res = ses.query(SysObject).filter(
             sasql.and_(
                 SysObject.parent_object_id == self.oid,
@@ -300,21 +320,27 @@ class DbTable(ObjWriter):
             twr = obj.getwriter(self.dump_path)
             twr.write()
 
+
 class DbView(ObjWriter):
     folder_name = 'views'
+
 
 class DbStoredProcedure(ObjWriter):
     folder_name = 'sps'
 
+
 class DbFunction(ObjWriter):
     folder_name = 'functions'
+
 
 class DbTrigger(ObjWriter):
     folder_name = 'tables'
 
     def write(self):
-        self.file_path = path.join(self.type_path, '%s_trg_%s.sql' % (self.so.parent.name, self.name))
+        self.file_path = path.join(self.type_path,
+                                   '%s_trg_%s.sql' % (self.so.parent.name, self.name))
         ObjWriter.write(self)
+
 
 class IndexMixin(object):
 
@@ -324,17 +350,19 @@ class IndexMixin(object):
             col_ddl.append('[%s] %s' % (c.column.name, 'DESC' if c.is_descending_key else 'ASC'))
         return '(%s) ON [%s]' % (', '.join(col_ddl), idx.data_space.name)
 
+
 class DbIndex(ObjWriter, IndexMixin):
     folder_name = ''
 
     def ddl(self):
         return 'CREATE %s INDEX [%s] ON [%s].[%s] %s' % (
-                self.so.type_desc,
-                self.name,
-                self.so.parent.schema.name,
-                self.so.parent.name,
-                self.index_ending_ddl(self.so)
-            )
+            self.so.type_desc,
+            self.name,
+            self.so.parent.schema.name,
+            self.so.parent.name,
+            self.index_ending_ddl(self.so)
+        )
+
 
 class DbConstraintBase(ObjWriter):
 
@@ -345,6 +373,7 @@ class DbConstraintBase(ObjWriter):
         ddl.append('ADD CONSTRAINT [%s]' % self.name)
         return ' '.join(ddl)
 
+
 class DbUniqueConstraint(DbConstraintBase, IndexMixin):
     folder_name = ''
 
@@ -352,12 +381,16 @@ class DbUniqueConstraint(DbConstraintBase, IndexMixin):
         idx = ses.query(SysIndex).filter_by(parent_id=self.so.parent.id, name=self.name).one()
         return '%s UNIQUE %s' % (self.alter_table_ddl(), self.index_ending_ddl(idx))
 
+
 class DbCheckConstraint(DbConstraintBase):
     folder_name = ''
 
     def ddl(self):
-        cc = ses.query(SysCheckConstraint).filter_by(parent_object_id=self.so.parent.id, name=self.name).one()
+        cc = ses.query(SysCheckConstraint).filter_by(
+            parent_object_id=self.so.parent.id, name=self.name
+        ).one()
         return '%s CHECK (%s)' % (self.alter_table_ddl(), cc.definition)
+
 
 _write_dirs = (
     'tables',
@@ -365,6 +398,7 @@ _write_dirs = (
     'sps',
     'functions'
 )
+
 
 # have to delay the creation of the directories sometimes b/c after removing
 # them windows throws an error when trying to re-create them right away
@@ -374,6 +408,7 @@ _write_dirs = (
 @retry(10, OSError, delay=0.2, msg='Access is denied')
 def make_directory(target):
     mkdirs(target)
+
 
 def write(dump_path, given_engine, print_names=True):
     global ses

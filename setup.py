@@ -32,7 +32,7 @@ setup(
         'Topic :: Database',
     ],
     author='Randy Syring',
-    author_email='rsyring@gmail.com',
+    author_email='randy.syring@level12.io',
     url='',
     license='',
     packages=find_packages(),
